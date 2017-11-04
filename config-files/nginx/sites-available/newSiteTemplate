@@ -2,11 +2,11 @@ server {
 	listen 80;
 	listen [::]:80;
 
-	root;
+	root [rootpath];
 
 	index index.php index.html;
 
-	server_name;
+	server_name [servername];
 
 	location / {
 		try_files $uri $uri/ /index.php?$query_string =404;

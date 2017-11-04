@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+clear
+
+if [ "$EUID" -ne 0 ]
+  then echo "This script requires root access, please run as root or use \"sudo ./new-server\""
+  exit
+fi
+
+file="/mnt/c/Windows/System32/drivers/etc/hosts"
+chmod 777 $file
+
+echo -e "Server name: \c"
+read domain
+domain=$domain
+
+echo -e "Root folder (leave empty to use the server name): \c"
+read rootpath
+rootpath=$rootpath
+if [ "$rootpath" == '' ]
+    then rootpath=$domain
+fi
+
+directory=`php -f ./php/directory.php $rootpath`
+mkdir $directory
+
+configFileContent=`php -f ./php/new-server.php $directory $domain`
+
+echo $configFileContent > /etc/nginx/sites-available/$rootpath.conf
+ln -s /etc/nginx/sites-available/$rootpath /etc/nginx/sites-enabled/$rootpath.conf
+service nginx reload
+
+hostsFile=`php -f ./php/hosts.php $domain`
+echo $hostsFile

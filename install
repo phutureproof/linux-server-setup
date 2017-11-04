@@ -2,11 +2,16 @@
 
 clear
 
+if [ "$EUID" -ne 0 ]
+  then echo "This script requires root access, please run as root or use \"sudo ./install\""
+  exit
+fi
+
 echo -e "Please enter PHP version: \c"
 read version
 phpVersion=$version
 
-echo "Adding ppa:ondrej/php to software sources"
+echo "Adding ppa:ondrej/php to software sources..."
 
 add-apt-repository ppa:ondrej/php --yes > /dev/null 2>&1
 
@@ -14,7 +19,7 @@ echo "Refreshing software sources..."
 
 apt-get update > /dev/null
 
-echo "Installing PHP $phpVersion..."
+echo "Installing PHP $phpVersion... (this may take a few minutes)"
 
 apt-get install php$phpVersion-fpm php$phpVersion-mysql php$phpVersion-xml php$phpVersion-gd php$phpVersion-mbstring php$phpVersion-xdebug --yes > /dev/null
 
@@ -27,13 +32,13 @@ echo "Copying PHP Config files..."
 cp ./config-files/php-fpm/php.ini /etc/php/$phpVersion/fpm/php.ini
 cp ./config-files/php-fpm/php-fpm.conf /etc/php/$phpVersion/fpm/php-fpm.conf
 cp ./config-files/php-fpm/www.conf /etc/php/$phpVersion/fpm/pool.d/www.conf
+cp ./config-files/php-fpm/mods-available/xdebug.ini /etc/php/7.1/mods-available/xdebug.ini
 
 echo "Starting php$phpVersion-fpm deamon..."
 service php$phpVersion-fpm start
-service php$phpVersion-fpm restart
 
 
-echo "Installing Nginx..."
+echo "Installing Nginx... (this may take a few minutes)"
 
 apt-get install nginx --yes > /dev/null
 
@@ -46,5 +51,17 @@ echo "Copying Nginx config files..."
 cp ./config-files/nginx/sites-available/default /etc/nginx/sites-available/default
 cp ./config-files/nginx/sites-available/newSiteTemplate /etc/nginx/sites-available/newSiteTemplate
 
-echo "Starting Nginx..."
+echo "Starting Nginx deamon..."
 service nginx start
+
+echo "Installing mariadb... (this may take a few minutes)"
+apt-get install mariadb-server --yes > /dev/null
+
+echo "Starting mysql daemon..."
+service mysql start > /dev/null
+
+echo "Starting mariadb config script..."
+/usr/bin/mysql_secure_installation
+
+echo "Finished!"
+echo "Please open \"http://localhost\" in your favorite browser to check installation."
