@@ -1,0 +1,23 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /mnt/d/Development/nginx-www-root;
+
+	index index.php index.html;
+
+	server_name _;
+
+	location / {
+		try_files $uri $uri/ /index.php?$query_string =404;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass 127.0.0.1:9090;
+	}
+
+	location ~ /\.ht {
+		deny all;
+	}
+}
