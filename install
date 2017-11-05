@@ -34,7 +34,7 @@ cp ./config-files/php-fpm/php-fpm.conf /etc/php/$phpVersion/fpm/php-fpm.conf
 cp ./config-files/php-fpm/www.conf /etc/php/$phpVersion/fpm/pool.d/www.conf
 cp ./config-files/php-fpm/mods-available/xdebug.ini /etc/php/7.1/mods-available/xdebug.ini
 
-echo "Starting php$phpVersion-fpm deamon..."
+echo "Starting php$phpVersion-fpm daemon..."
 service php$phpVersion-fpm start
 
 
@@ -51,7 +51,7 @@ echo "Copying Nginx config files..."
 cp ./config-files/nginx/sites-available/default /etc/nginx/sites-available/default
 cp ./config-files/nginx/sites-available/newSiteTemplate /etc/nginx/sites-available/newSiteTemplate
 
-echo "Starting Nginx deamon..."
+echo "Starting Nginx daemon..."
 service nginx start
 
 echo "Installing mariadb... (this may take a few minutes)"

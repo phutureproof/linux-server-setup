@@ -26,7 +26,7 @@ mkdir $directory
 
 configFileContent=`php -f ./php/new-server.php $directory $domain`
 
-echo $configFileContent > /etc/nginx/sites-available/$rootpath.conf
+echo -e $configFileContent > /etc/nginx/sites-available/$rootpath.conf
 ln -s /etc/nginx/sites-available/$rootpath.conf /etc/nginx/sites-enabled/$rootpath.conf
 service nginx restart
 
