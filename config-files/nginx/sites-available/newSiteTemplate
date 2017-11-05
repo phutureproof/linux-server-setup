@@ -1,23 +1,19 @@
 server {
 	listen 80;
 	listen [::]:80;
-
 	root [rootpath];
-
 	index index.php index.html;
-
 	server_name [servername];
-
 	location / {
 		try_files $uri $uri/ /index.php?$query_string =404;
 	}
 
 	location ~ \.php$ {
-		include snippets/fastcgi-php.conf;
-		fastcgi_pass 127.0.0.1:9090;
+	    include snippets/fastcgi-php.conf;
+	    fastcgi_pass 127.0.0.1:9090;
 	}
 
 	location ~ /\.ht {
-		deny all;
+	    deny all;
 	}
 }

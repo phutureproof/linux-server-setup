@@ -8,26 +8,22 @@ if [ "$EUID" -ne 0 ]
 fi
 
 echo "Removing PHP... (this may take a few minutes)"
+apt-get remove php* --yes > /dev/null
 
-apt-get purge php* --yes > /dev/null
-
-echo "Cleaning PHP directories..."
-
-rm -rf /etc/php
+#echo "Cleaning PHP directories..."
+#rm -rf /etc/php
 
 echo "Finished removing PHP."
 
 echo "Removing Nginx... (this may take a few minutes)"
+apt-get remove nginx* --yes > /dev/null
 
-apt-get purge nginx* --yes > /dev/null
-
-echo "Cleaning Nginx directories..."
-
-rm -rf /etc/nginx
-rm -rf /var/www
+#echo "Cleaning Nginx directories..."
+#rm -rf /etc/nginx
+#rm -rf /var/www
 
 echo "Finished removing Nginx."
 
 echo "Removing mariadb... (this may take a few minutes)"
-apt-get purge mariadb* --yes > /dev/null
+apt-get remove mariadb* --yes > /dev/null
 

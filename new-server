@@ -27,8 +27,13 @@ mkdir $directory
 configFileContent=`php -f ./php/new-server.php $directory $domain`
 
 echo $configFileContent > /etc/nginx/sites-available/$rootpath.conf
-ln -s /etc/nginx/sites-available/$rootpath /etc/nginx/sites-enabled/$rootpath.conf
-service nginx reload
+ln -s /etc/nginx/sites-available/$rootpath.conf /etc/nginx/sites-enabled/$rootpath.conf
+service nginx restart
 
 hostsFile=`php -f ./php/hosts.php $domain`
 echo $hostsFile
+
+echo "Copying index.php to new directory"
+cp ./php/index.php $directory/index.php
+
+echo "New server created!"

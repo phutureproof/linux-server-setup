@@ -1,3 +1,19 @@
 #!/usr/bin/env bash
 
+clear
 
+if [ "$EUID" -ne 0 ]
+  then echo "This script requires root access, please run as root or use \"sudo ./install\""
+  exit
+fi
+
+echo "Fetching composer installer..."
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" > /dev/null
+php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" > /dev/null
+echo "Running installation..."
+php composer-setup.php > /dev/null
+echo "Removing installation files..."
+php -r "unlink('composer-setup.php');" > /dev/null
+echo "Moving composer.phar to /usr/local/bin/composer"
+mv ./composer.phar /usr/local/bin/composer
+echo "Finished!"
